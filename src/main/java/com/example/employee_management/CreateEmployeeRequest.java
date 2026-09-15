@@ -1,10 +1,16 @@
 package com.example.employee_management;
 import java.time.LocalDate;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CreateEmployeeRequest {
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String email;
+    @NotNull
     private LocalDate hireDate;
 
     public CreateEmployeeRequest(){

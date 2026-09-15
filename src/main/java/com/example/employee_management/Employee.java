@@ -22,10 +22,11 @@ public class Employee {
     private BigDecimal salary;
     private LocalDate hireDate;
 
-    public Employee(String firstName, String lastName, String email){
+    public Employee(String firstName, String lastName, String email, LocalDate hireDate){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.hireDate = hireDate;
     }
 
     protected Employee(){

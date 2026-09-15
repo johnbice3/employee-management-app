@@ -22,6 +22,6 @@ public class EmployeeController {
 
     @PostMapping
     public Employee createEmployeeByRequest(@RequestBody CreateEmployeeRequest request){
-        return employeeService.createEmployee(request.getFirstName(), request.getLastName(), request.getEmail());
+        return employeeService.createEmployee(request.getFirstName(), request.getLastName(), request.getEmail(), request.getHireDate());
     }
 }

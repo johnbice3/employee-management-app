@@ -2,10 +2,11 @@ package com.example.employee_management;
 
 import java.util.List;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface EmployeeService {
     
-    public Employee createEmployee(String firstName, String lastName, String email);
+    public Employee createEmployee(String firstName, String lastName, String email, LocalDate hireDate);
 
     public Employee getEmployeeInfo(Long id);
 

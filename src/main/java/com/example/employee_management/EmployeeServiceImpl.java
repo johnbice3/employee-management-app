@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.List;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -13,8 +14,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee createEmployee(String firstName, String lastName, String email){
-        Employee newEmployee = new Employee(firstName, lastName, email);
+    public Employee createEmployee(String firstName, String lastName, String email, LocalDate hireDate){
+        Employee newEmployee = new Employee(firstName, lastName, email, hireDate);
         
         return employeeRepository.save(newEmployee);
     }

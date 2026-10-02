@@ -12,6 +12,25 @@ function App() {
   const [email, updateEmail] = useState("")
   const [hireDate, updateHireDate] = useState("")
 
+  function handleSubmit(event){
+    event.preventDefault()
+
+    const employeeData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      hireDate: hireDate
+    }
+    console.log(employeeData)
+    fetch("http://localhost:8080/employees", {
+      method: "POST", 
+      headers: {
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify(employeeData)
+    })
+  }
+
   return (
     <>
       <section id="center">
@@ -33,7 +52,7 @@ function App() {
             Add employee
           </button>  
           {showEmployeeAddForm && (
-            <form>
+            <form onSubmit={handleSubmit}>
               <p> Add Employee Form </p>
               <label htmlFor="firstName">First Name </label>
               <input type="text" value={firstName} onChange={(event) => updateFirstName(event.target.value)} id="firstName" name="firstName"/> <br />

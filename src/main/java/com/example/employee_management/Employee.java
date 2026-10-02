@@ -1,11 +1,13 @@
 package com.example.employee_management;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 public class Employee {
@@ -17,8 +19,8 @@ public class Employee {
     private String lastName;
     private String email;
     private String jobTitle;
-    private int departmentNumber;
-    private String departmentName;
+    @Embedded 
+    private Department department;
     private BigDecimal salary;
     private LocalDate hireDate;
 
@@ -48,11 +50,8 @@ public class Employee {
     public String getJobTitle(){
         return this.jobTitle;
     }
-    public int getDepartmentNumber(){
-        return this.departmentNumber;
-    }
-    public String getDepartmentName(){
-        return this.departmentName;
+    public Department getDepartment(){
+        return this.department;
     }
     public LocalDate getHireDate(){
         return this.hireDate;
@@ -63,9 +62,8 @@ public class Employee {
     public void setSalary(BigDecimal salary){
         this.salary = salary;
     }
-    public void setDepartment(int departmentNumber, String departmentName){
-        this.departmentNumber = departmentNumber;
-        this.departmentName = departmentName;
+    public void setDepartment(Department department){
+        this.department = department;
     }
     public void setJobTitle(String jobTitle){
         this.jobTitle = jobTitle;

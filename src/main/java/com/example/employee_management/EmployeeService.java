@@ -16,5 +16,5 @@ public interface EmployeeService {
 
     public void updateJobTitle(Long id, String jobTitle);
 
-    public void updateDepartment(Long id, int departmentNumber, String departmentName);
+    public void updateDepartment(Long id, String departmentCode, String departmentName);
 }

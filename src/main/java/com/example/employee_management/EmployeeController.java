@@ -40,5 +40,11 @@ public class EmployeeController {
 
         return ResponseEntity.ok("Job Title updated successfully");
     }
+    @PutMapping ("/{id}/department")
+    public ResponseEntity<String> departmentUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateDepartmentRequest request){
+        employeeService.updateDepartment(id, request.getDepartmentCode(), request.getDepartmentName());
+
+        return ResponseEntity.ok("Department updated successfully");
+    }
 
 }

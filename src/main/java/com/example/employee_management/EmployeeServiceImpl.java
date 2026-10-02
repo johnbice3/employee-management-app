@@ -50,9 +50,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updateDepartment(Long id, int departmentNumber, String departmentName){
+    public void updateDepartment(Long id, String departmentCode, String departmentName){
         Employee employee = getEmployeeInfo(id);
-        employee.setDepartment(departmentNumber, departmentName);
+        Department department = new Department(departmentCode, departmentName);
+        employee.setDepartment(department);
         employeeRepository.save(employee);
     }
 }

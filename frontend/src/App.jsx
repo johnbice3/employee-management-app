@@ -132,6 +132,38 @@ function App() {
         > 
           Back to home 
         </button>
+        <h1> All Employee Records </h1>
+        {!employeeList && 
+          <p>Loading employees... </p>}
+         
+        <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Employee Name </th>
+                <th>Employee Email Address </th>
+                <th>Employee Hire Date </th>
+                <th>Job Title </th>
+                <th>Department </th>
+                <th>Salary </th>
+              </tr>
+            </thead>
+            <tbody>
+              {employeeList &&
+                employeeList.map((employee) => {
+                  return <tr key={employee.id}>
+                    <td> {employee.id} </td>
+                    <td> {employee.firstName} {employee.lastName} </td>
+                    <td> {employee.email} </td>
+                    <td> {employee.hireDate} </td>
+                    <td> {employee.jobTitle} </td>
+                    <td> {employee.department?.departmentName} </td>
+                    <td> {employee.salary} </td>
+                  </tr> 
+                })
+              }
+            </tbody>
+          </table>
         </div>
         }
       <div className="ticks"></div>

@@ -1,4 +1,6 @@
 package com.example.employee_management;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +49,10 @@ public class EmployeeController {
         employeeService.updateDepartment(id, request.getDepartmentCode(), request.getDepartmentName());
 
         return ResponseEntity.ok("Department updated successfully");
+    }
+    @GetMapping
+    public List<Employee> listAllEmployees(){
+        return employeeService.listAllEmployees();
     }
 
 }

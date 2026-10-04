@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -6,13 +6,14 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-  const [showEmployeeAddForm, showForm] = useState(false)
   const [firstName, updateFirstName] = useState("")
   const [lastName, updateLastName] = useState("")
   const [email, updateEmail] = useState("")
   const [hireDate, updateHireDate] = useState("")
   const [pendingEERecord, addNewEmployee] = useState(null)
   const [employeeSubmissionError, updateSubmissionError] = useState(null)
+  const [employeeList, displayEmployees] = useState(null)
+  const [currentView, changeCurrentView] = useState("home")
 
   function handleSubmit(event){
     event.preventDefault()
@@ -47,9 +48,18 @@ function App() {
       updateSubmissionError(error)
     })
   }
-
+  useEffect(() => {
+    fetch("http://localhost:8080/employees")
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      displayEmployees(data)
+    })
+    }, [])
   return (
     <>
+      {currentView === "home" &&
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -63,46 +73,67 @@ function App() {
           </p>
           <button
             type="button"
-            className="primaryButton"
-            onClick={() => showForm(true)}
+            className="navigationButton"
+            onClick={() => changeCurrentView("addEmployees")}
           >
-            Add employee
+            Add employees
           </button>  
-          {showEmployeeAddForm && (
-            <form onSubmit={handleSubmit}>
-              <p> Add Employee Form </p>
-              <label htmlFor="firstName">First Name </label>
-              <input type="text" value={firstName} onChange={(event) => updateFirstName(event.target.value)} id="firstName" name="firstName"/> <br />
-              <label htmlFor="lastName">Last Name </label>
-              <input type="text" value={lastName} onChange={(event) => updateLastName(event.target.value)} id="lastName" name="lastName"/> <br />
-              <label htmlFor="email">Email Address </label>
-              <input type="text" value={email} onChange={(event) => updateEmail(event.target.value)} id="email" name="email"/> <br />
-              <label htmlFor="hireDate">Hire Date </label>
-              <input type="date" value={hireDate} onChange={(event) => updateHireDate(event.target.value)} id="hireDate" name="hireDate"/> <br />
-              <button
-                type="submit"
-                className="confirmButton"
-              >
-              Submit Employee  
-              </button>
-              {pendingEERecord && (
-                <p>{pendingEERecord.firstName} created successfully! </p>
-                )}  
-              {employeeSubmissionError && (
-                <p>There was an issue submitting the employee. </p>
-              )}
-            </form>  
-          )}
+          <button
+            type="button"
+            className="navigationButton"
+            onClick={() => changeCurrentView("employeeListView")}
+          >
+            View all employees
+          </button>
         </div>
+      </section>
+      }
+      {currentView === "addEmployees" &&
+      <div>
         <button
           type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+          className="navigationButton"
+          onClick={() => changeCurrentView("home")}
+        > 
+        Back to home 
         </button>
-      </section>
-
+        <p> Add employees on this page </p>
+        <form onSubmit={handleSubmit}>
+          <p> Add Employee Form </p>
+          <label htmlFor="firstName">First Name </label>
+          <input type="text" value={firstName} onChange={(event) => updateFirstName(event.target.value)} id="firstName" name="firstName"/> <br />
+          <label htmlFor="lastName">Last Name </label>
+          <input type="text" value={lastName} onChange={(event) => updateLastName(event.target.value)} id="lastName" name="lastName"/> <br />
+          <label htmlFor="email">Email Address </label>
+          <input type="text" value={email} onChange={(event) => updateEmail(event.target.value)} id="email" name="email"/> <br />
+          <label htmlFor="hireDate">Hire Date </label>
+          <input type="date" value={hireDate} onChange={(event) => updateHireDate(event.target.value)} id="hireDate" name="hireDate"/> <br />
+          <button
+            type="submit"
+            className="confirmButton"
+          >
+          Submit Employee  
+          </button>
+          {pendingEERecord && (
+            <p>{pendingEERecord.firstName} created successfully! </p>
+            )}  
+          {employeeSubmissionError && (
+            <p>There was an issue submitting the employee. </p>
+          )}
+        </form>
+      </div>
+      }
+      {currentView === "employeeListView" &&
+        <div>
+          <button
+          type="button"
+          className="navigationButton"
+          onClick={() => changeCurrentView("home")}
+        > 
+          Back to home 
+        </button>
+        </div>
+        }
       <div className="ticks"></div>
 
       <section id="next-steps">
@@ -185,7 +216,6 @@ function App() {
           </ul>
         </div>
       </section>
-
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>

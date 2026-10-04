@@ -11,6 +11,8 @@ function App() {
   const [lastName, updateLastName] = useState("")
   const [email, updateEmail] = useState("")
   const [hireDate, updateHireDate] = useState("")
+  const [pendingEERecord, addNewEmployee] = useState(null)
+  const [employeeSubmissionError, updateSubmissionError] = useState(null)
 
   function handleSubmit(event){
     event.preventDefault()
@@ -21,13 +23,28 @@ function App() {
       email: email,
       hireDate: hireDate
     }
-    console.log(employeeData)
+    addNewEmployee(null)
+    updateSubmissionError(null)
     fetch("http://localhost:8080/employees", {
       method: "POST", 
       headers: {
         "Content-Type":"application/json"
       },
       body: JSON.stringify(employeeData)
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      addNewEmployee(data)
+      updateFirstName("")
+      updateLastName("")    
+      updateEmail("")
+      updateHireDate("")
+    })
+    .catch((error) => {
+      console.error(error)
+      updateSubmissionError(error)
     })
   }
 
@@ -67,7 +84,13 @@ function App() {
                 className="confirmButton"
               >
               Submit Employee  
-              </button>  
+              </button>
+              {pendingEERecord && (
+                <p>{pendingEERecord.firstName} created successfully! </p>
+                )}  
+              {employeeSubmissionError && (
+                <p>There was an issue submitting the employee. </p>
+              )}
             </form>  
           )}
         </div>

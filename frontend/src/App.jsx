@@ -55,50 +55,66 @@ function App() {
     }, [])
   return (
     <>
+    <header>
+      <h1> Employee Management </h1>
+      <nav> 
+        <button
+          type="button"
+          className="navigationButton"
+          onClick={() => changeCurrentView("home")}
+        >
+        Home 
+        </button>  
+        <button
+          type="button"
+          className="navigationButton"
+          onClick={() => changeCurrentView("addEmployees")}
+        >
+          Add employees
+        </button> 
+        <button
+          type="button"
+          className="navigationButton"
+          onClick={() => changeCurrentView("employeeListView")}
+        >
+        View Employees
+        </button>
+      </nav>
+    </header>
+    <main>
       {currentView === "home" &&
-      <section id="center">
+      <section className="homeView">
         <div>
-          <h1>Employee Management Program</h1>
+          <h2>Employee Management Program</h2>
           <p>
             Manage your employees and compensation data.
           </p>
-          <button
-            type="button"
-            className="navigationButton"
-            onClick={() => changeCurrentView("addEmployees")}
-          >
-            Add employees
-          </button>  
-          <button
-            type="button"
-            className="navigationButton"
-            onClick={() => changeCurrentView("employeeListView")}
-          >
-            View all employees
-          </button>
         </div>
       </section>
       }
       {currentView === "addEmployees" &&
       <div>
-        <button
-          type="button"
-          className="navigationButton"
-          onClick={() => changeCurrentView("home")}
-        > 
-        Back to home 
-        </button>
-        <p> Add employees on this page </p>
-        <form onSubmit={handleSubmit}>
-          <p> Add Employee Form </p>
+        <form 
+        onSubmit={handleSubmit}
+        className="employeeForm"
+        >
+          <h2> Employee Submission Form </h2>
+          <div className="formField">
           <label htmlFor="firstName">First Name </label>
-          <input type="text" value={firstName} onChange={(event) => updateFirstName(event.target.value)} id="firstName" name="firstName"/> <br />
+          <input type="text" value={firstName} onChange={(event) => updateFirstName(event.target.value)} id="firstName" name="firstName"/>
+          </div>
+          <div className="formField">
           <label htmlFor="lastName">Last Name </label>
-          <input type="text" value={lastName} onChange={(event) => updateLastName(event.target.value)} id="lastName" name="lastName"/> <br />
+          <input type="text" value={lastName} onChange={(event) => updateLastName(event.target.value)} id="lastName" name="lastName"/>
+          </div>
+          <div className="formField">
           <label htmlFor="email">Email Address </label>
-          <input type="text" value={email} onChange={(event) => updateEmail(event.target.value)} id="email" name="email"/> <br />
+          <input type="text" value={email} onChange={(event) => updateEmail(event.target.value)} id="email" name="email"/>
+          </div>
+          <div className="formField">
           <label htmlFor="hireDate">Hire Date </label>
-          <input type="date" value={hireDate} onChange={(event) => updateHireDate(event.target.value)} id="hireDate" name="hireDate"/> <br />
+          <input type="date" value={hireDate} onChange={(event) => updateHireDate(event.target.value)} id="hireDate" name="hireDate"/>
+          </div>
           <button
             type="submit"
             className="confirmButton"
@@ -116,14 +132,7 @@ function App() {
       }
       {currentView === "employeeListView" &&
         <div>
-          <button
-          type="button"
-          className="navigationButton"
-          onClick={() => changeCurrentView("home")}
-        > 
-          Back to home 
-        </button>
-        <h1> All Employee Records </h1>
+        <h2> All Employee Records </h2>
         {!employeeList && 
           <p>Loading employees... </p>}
          
@@ -158,6 +167,7 @@ function App() {
           </table>
         </div>
         }
+      </main>
     </>
   )
 }

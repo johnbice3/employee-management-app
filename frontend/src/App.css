@@ -1,4 +1,4 @@
-#center {
+.homeView {
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -10,4 +10,73 @@
     padding: 32px 20px 24px;
     gap: 18px;
   }
+}
+body {
+  font-family: Calibri;
+  margin: 0;
+  background-color: #16171d;
+}
+header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+nav {
+  display: flex;
+  gap: 10px;
+}
+.navigationButton {
+  padding: 8px 16px;
+  background: var(--accent-bg);
+  border: 2px solid var(--accent-bg);
+}
+.navigationButton:hover{
+  background: var(--accent-border);
+}
+.employeeTable{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 1px solid var(--border);
+}
+th{
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent-bg);
+  font-weight: 600;
+  color: var(--text-h);
+  position: sticky;
+  top: 0;
+}
+td{
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.employeeTable tbody tr:hover{
+  background: var(--accent-bg);
+}
+.employeeForm{
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.confirmButton{
+  margin-top: 12px;
+  width:30%;
+  align-self: center;
 }

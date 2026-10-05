@@ -62,6 +62,13 @@ function App() {
   function formatDate(date){
    return date != null ? new Date(date).toLocaleDateString(): "-"
   }
+  function calculateNewSalary(employee) { 
+    if (employee.salary != null) {
+      return Math.round((employee.salary * (1 + Number(increasePercentage[employee.id] ?? "0.0") / 100) * 100))/100 
+    }
+    return null
+  }
+
   return (
     <>
     <header>
@@ -158,6 +165,7 @@ function App() {
                   <th>Department</th>
                   <th>Salary</th>
                   <th>% Increase</th>
+                  <th className="tableProposedSalary">New Proposed Salary</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,6 +206,7 @@ function App() {
                       />
                       <span className="percentageSymbol"> % </span>
                       </td>
+                      <td> {formatSalary(calculateNewSalary(employee))} </td>
                     </tr> 
                   })
                 }

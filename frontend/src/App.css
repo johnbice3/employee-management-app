@@ -154,3 +154,6 @@ td{
   font-size: 14px;
   vertical-align: middle;
 }
+.employeeTable th.tableProposedSalary{
+  white-space: normal;
+}

@@ -11,6 +11,8 @@ function App() {
   const [employeeList, displayEmployees] = useState(null)
   const [currentView, changeCurrentView] = useState("home")
   const [selectedEmployee, changeSelectedEmployee] = useState(null)
+  const [increasePercentage, updateIncreasePercentage] = useState({})
+  const increasePercentageRegEx = /^\d*\.?\d?$/
 
   function handleSubmit(event){
     event.preventDefault()
@@ -149,12 +151,13 @@ function App() {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th className="employeeTableDataColumn">Employee Name </th>
-                  <th className="employeeTableDataColumn">Employee Email Address </th>
-                  <th>Employee Hire Date </th>
-                  <th className="employeeTableDataColumn">Job Title </th>
-                  <th>Department </th>
-                  <th>Salary </th>
+                  <th className="employeeTableDataColumn">Employee Name</th>
+                  <th className="employeeTableDataColumn">Employee Email Address</th>
+                  <th>Employee Hire Date</th>
+                  <th className="employeeTableDataColumn">Job Title</th>
+                  <th>Department</th>
+                  <th>Salary</th>
+                  <th>% Increase</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,11 +170,34 @@ function App() {
                     >
                       <td> {employee.id} </td>
                       <td className="employeeTableDataColumn"> {employee.firstName} {employee.lastName} </td>
-                      <td className="employeeTableDataColumn"> {employee.email} </td>
+                      <td className="employeeTableEmail"> {employee.email} </td>
                       <td> {formatDate(employee.hireDate)} </td>
                       <td className="employeeTableDataColumn"> {employee.jobTitle} </td>
                       <td> {employee.department?.departmentName} </td>
                       <td> {formatSalary(employee.salary)} </td>
+                      <td className="percentageIncreaseInput"><input 
+                      type="number" 
+                      className="percentageIncreaseInput"
+                      step="0.1" 
+                      inputmode="decimal" 
+                      value={increasePercentage[employee.id]?? "0.0"} 
+                      onChange={(event) => {
+                        if (increasePercentageRegEx.test(event.target.value)){
+                          updateIncreasePercentage((previous) => {
+                            return {
+                              ...previous,
+                              [employee.id]:event.target.value}})}}}
+                      onBlur={(event) => {
+                        if (!event.target.value.includes(".")){
+                           updateIncreasePercentage((previous) => {
+                            return {
+                              ...previous,
+                              [employee.id]: Number(event.target.value).toFixed(1)
+                            }
+                        })}}}
+                      />
+                      <span className="percentageSymbol"> % </span>
+                      </td>
                     </tr> 
                   })
                 }

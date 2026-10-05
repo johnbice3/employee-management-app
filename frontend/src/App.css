@@ -42,8 +42,20 @@ nav {
   margin-top: 20px;
   border: 1px solid var(--border);
 }
-.employeeTable th, .employeeTable td {
+.employeeTable th, 
+.employeeTable td {
   white-space: nowrap;
+}
+.employeeTableDataColumn{
+  max-width: 200px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.employeeTable td.employeeTableEmail{
+  width: 200px;
+  max-width: 200px;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 th{
   padding: 10px;
@@ -110,17 +122,13 @@ td{
     transform: translateX(100%);
   }
   to {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
 }
 .selectedEmployeeRow{
   background: var(--accent-bg);
 }
-.employeeTableDataColumn{
-  max-width: 200px;
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
+
 .detailsPaneEmail{
   white-space: normal;
 }
@@ -131,4 +139,18 @@ td{
 }
 .detailsPaneLabels{
   font-weight: 600;
+}
+.percentageIncreaseInput{
+  width: 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.percentageIncreaseInput::-webkit-inner-spin-button,
+.percentageIncreaseInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.percentageSymbol{
+  font-size: 14px;
+  vertical-align: middle;
 }

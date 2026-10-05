@@ -10,6 +10,7 @@ function App() {
   const [employeeSubmissionError, updateSubmissionError] = useState(null)
   const [employeeList, displayEmployees] = useState(null)
   const [currentView, changeCurrentView] = useState("home")
+  const [selectedEmployee, changeSelectedEmployee] = useState(null)
 
   function handleSubmit(event){
     event.preventDefault()
@@ -53,6 +54,12 @@ function App() {
       displayEmployees(data)
     })
     }, [])
+  function formatSalary(salary){
+    return salary !== null ? salary.toLocaleString("en-US", {style: "currency", currency: "USD"}): "-"
+  }
+  function formatDate(date){
+   return date != null ? new Date(date).toLocaleDateString(): "-"
+  }
   return (
     <>
     <header>
@@ -132,41 +139,64 @@ function App() {
       }
       {currentView === "employeeListView" &&
         <div>
-        <h2> All Employee Records </h2>
-        {!employeeList && 
-          <p>Loading employees... </p>}
-         
-        <table
-          className="employeeTable">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Employee Name </th>
-                <th>Employee Email Address </th>
-                <th>Employee Hire Date </th>
-                <th>Job Title </th>
-                <th>Department </th>
-                <th>Salary </th>
-              </tr>
-            </thead>
-            <tbody>
-              {employeeList &&
-                employeeList.map((employee) => {
-                  return <tr key={employee.id}>
-                    <td> {employee.id} </td>
-                    <td> {employee.firstName} {employee.lastName} </td>
-                    <td> {employee.email} </td>
-                    <td> {employee.hireDate} </td>
-                    <td> {employee.jobTitle} </td>
-                    <td> {employee.department?.departmentName} </td>
-                    <td> {employee.salary} </td>
-                  </tr> 
-                })
-              }
-            </tbody>
-          </table>
+          <h2> All Employee Records </h2>
+          <div className="employeeListContainer">
+          {!employeeList && 
+            <p>Loading employees... </p>}
+          
+          <table
+            className="employeeTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th className="employeeTableDataColumn">Employee Name </th>
+                  <th className="employeeTableDataColumn">Employee Email Address </th>
+                  <th>Employee Hire Date </th>
+                  <th className="employeeTableDataColumn">Job Title </th>
+                  <th>Department </th>
+                  <th>Salary </th>
+                </tr>
+              </thead>
+              <tbody>
+                {employeeList &&
+                  employeeList.map((employee) => {
+                    return <tr 
+                    className={employee.id === selectedEmployee?.id ? "selectedEmployeeRow" : ""}
+                    key={employee.id}
+                    onClick={() => changeSelectedEmployee(employee)}
+                    >
+                      <td> {employee.id} </td>
+                      <td className="employeeTableDataColumn"> {employee.firstName} {employee.lastName} </td>
+                      <td className="employeeTableDataColumn"> {employee.email} </td>
+                      <td> {formatDate(employee.hireDate)} </td>
+                      <td className="employeeTableDataColumn"> {employee.jobTitle} </td>
+                      <td> {employee.department?.departmentName} </td>
+                      <td> {formatSalary(employee.salary)} </td>
+                    </tr> 
+                  })
+                }
+              </tbody>
+            </table>           
+          </div>
+          {selectedEmployee && 
+            <div className="employeeDetailsPane"> 
+              <h3> {selectedEmployee.firstName} {selectedEmployee.lastName} </h3>
+              <p className="detailsPaneEmail"><span className="detailsPaneLabels"> Email: </span>{selectedEmployee.email} </p>
+              <p><span className="detailsPaneLabels"> Hire Date: </span>{formatDate(selectedEmployee.hireDate)} </p>
+              <p><span className="detailsPaneLabels"> Job Title: </span>{selectedEmployee.jobTitle} </p>
+              <p><span className="detailsPaneLabels"> Department: </span>{selectedEmployee.department?.departmentName} </p>
+              <p><span className="detailsPaneLabels"> Salary: </span>{formatSalary(selectedEmployee.salary)} </p>
+            <button 
+              type="button"
+              className="closeDetailsButton"
+              onClick={() => changeSelectedEmployee(null)}
+            >
+            x  
+            </button>
+            </div>
+          }
         </div>
-        }
+      }
       </main>
     </>
   )

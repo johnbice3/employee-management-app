@@ -12,7 +12,9 @@ function App() {
   const [currentView, changeCurrentView] = useState("home")
   const [selectedEmployee, changeSelectedEmployee] = useState(null)
   const [increasePercentage, updateIncreasePercentage] = useState({})
+  const [increaseAmount, updateIncreaseAmount] = useState({})
   const increasePercentageRegEx = /^\d*\.?\d?$/
+  const increaseAmountRegEx = /^\d*\.?\d{0,2}$/
 
   function handleSubmit(event){
     event.preventDefault()
@@ -67,6 +69,16 @@ function App() {
       return Math.round((employee.salary * (1 + Number(increasePercentage[employee.id] ?? "0.0") / 100) * 100))/100 
     }
     return null
+  }
+  function calculateAmountIncrease(employee, percentage){
+    if (employee.salary != null) {
+      return Math.round((employee.salary * percentage / 100)*100)/100
+    }
+  }
+  function calculatePercentageIncrease(employee, amount){
+    if (employee.salary != null) {
+      return Math.round((amount  / employee.salary * 100) * 10) / 10
+    }
   }
 
   return (
@@ -165,6 +177,7 @@ function App() {
                   <th>Department</th>
                   <th>Salary</th>
                   <th>% Increase</th>
+                  <th>Amount Increase</th>
                   <th className="tableProposedSalary">New Proposed Salary</th>
                 </tr>
               </thead>
@@ -194,17 +207,45 @@ function App() {
                           updateIncreasePercentage((previous) => {
                             return {
                               ...previous,
-                              [employee.id]:event.target.value}})}}}
+                              [employee.id]:event.target.value}})
+                          updateIncreaseAmount((previous) => {
+                              return {
+                                ...previous,
+                                [employee.id]: calculateAmountIncrease(employee, event.target.value)
+                              }
+                            })    
+                        }}}
                       onBlur={(event) => {
                         if (!event.target.value.includes(".")){
                            updateIncreasePercentage((previous) => {
                             return {
                               ...previous,
                               [employee.id]: Number(event.target.value).toFixed(1)
-                            }
-                        })}}}
+                            }})
+                      }}}
                       />
                       <span className="percentageSymbol"> % </span>
+                      </td>
+                      <td> <input 
+                      type="number"
+                      className="amountIncreaseInput"
+                      step=".01"
+                      inputmode="decimal"
+                      value={increaseAmount[employee.id]?? "0.00"}
+                      onChange={(event) => {
+                        if (increaseAmountRegEx.test(event.target.value)){
+                          updateIncreaseAmount((previous) => {
+                            return {
+                              ...previous,
+                              [employee.id]:event.target.value}})
+                          updateIncreasePercentage((previous) => {
+                            return {
+                              ...previous,
+                              [employee.id]:calculatePercentageIncrease(employee, event.target.value)
+                            }})
+                          }  
+                          }}
+                      /> 
                       </td>
                       <td> {formatSalary(calculateNewSalary(employee))} </td>
                     </tr> 
@@ -236,5 +277,4 @@ function App() {
     </>
   )
 }
-
 export default App

@@ -173,11 +173,12 @@ function App() {
                   <th className="employeeTableDataColumn">Employee Name</th>
                   <th className="employeeTableDataColumn">Employee Email Address</th>
                   <th>Employee Hire Date</th>
+                  <th>Manager Name</th>
                   <th className="employeeTableDataColumn">Job Title</th>
                   <th>Department</th>
                   <th>Salary</th>
                   <th>% Increase</th>
-                  <th>Amount Increase</th>
+                  <th>Increase Amount </th>
                   <th className="tableProposedSalary">New Proposed Salary</th>
                 </tr>
               </thead>
@@ -193,6 +194,7 @@ function App() {
                       <td className="employeeTableDataColumn"> {employee.firstName} {employee.lastName} </td>
                       <td className="employeeTableEmail"> {employee.email} </td>
                       <td> {formatDate(employee.hireDate)} </td>
+                      <td> {employee.manager?.firstName ?? "-"} {employee.manager?.lastName ?? ""} </td>
                       <td className="employeeTableDataColumn"> {employee.jobTitle} </td>
                       <td> {employee.department?.departmentName} </td>
                       <td> {formatSalary(employee.salary)} </td>
@@ -226,7 +228,9 @@ function App() {
                       />
                       <span className="percentageSymbol"> % </span>
                       </td>
-                      <td> <input 
+                      <td> 
+                      <span className="dollarSymbol"> $ </span>
+                      <input 
                       type="number"
                       className="amountIncreaseInput"
                       step=".01"
@@ -243,8 +247,18 @@ function App() {
                               ...previous,
                               [employee.id]:calculatePercentageIncrease(employee, event.target.value)
                             }})
-                          }  
-                          }}
+                        }  
+                      }}
+                      onBlur={(event) => {
+                        if ((event.target.value.split(".")[1] ?? "").length !== 2){
+                          updateIncreaseAmount((previous) => {
+                            return {
+                              ...previous,
+                              [employee.id]:Number(event.target.value).toFixed(2)
+                            }
+                          })
+                        }
+                      }}
                       /> 
                       </td>
                       <td> {formatSalary(calculateNewSalary(employee))} </td>

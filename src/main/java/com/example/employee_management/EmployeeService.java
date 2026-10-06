@@ -1,8 +1,8 @@
 package com.example.employee_management;
 
-import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface EmployeeService {
     
@@ -17,4 +17,8 @@ public interface EmployeeService {
     public void updateJobTitle(Long id, String jobTitle);
 
     public void updateDepartment(Long id, String departmentCode, String departmentName);
+
+    public void updateManager(Long id, Long managerId);
+
+    public List<Employee> listEmployeesReportingToManager(Long managerId);
 }

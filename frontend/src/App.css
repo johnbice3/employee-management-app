@@ -97,6 +97,7 @@ td{
   align-self: center;
 }
 .employeeListContainer{
+  width: 100%;
   display: flex;
   gap: 10px;
   align-items: flex-start;
@@ -156,4 +157,18 @@ td{
 }
 .employeeTable th.tableProposedSalary{
   white-space: normal;
+}
+.dollarSymbol{
+  font-size: 14px;
+  vertical-align: middle;
+}
+.amountIncreaseInput{
+  width: 70px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.amountIncreaseInput::-webkit-inner-spin-button,
+.amountIncreaseInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

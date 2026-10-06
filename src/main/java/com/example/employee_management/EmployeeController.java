@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
+
 @RestController
 @CrossOrigin
 @RequestMapping("/employees")
@@ -54,5 +55,15 @@ public class EmployeeController {
     public List<Employee> listAllEmployees(){
         return employeeService.listAllEmployees();
     }
+    @PutMapping("/{id}/manager")
+    public ResponseEntity<String> managerUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateManagerRequest request) {
+        employeeService.updateManager(id, request.getManagerId());
 
+        return ResponseEntity.ok("Manager updated successfully");
+    }
+    @GetMapping("/{managerId}/direct-reports")
+    public List<Employee> listEmployeesReportToManager(@PathVariable Long managerId){
+        return employeeService.listEmployeesReportingToManager(managerId);
+    }
+    
 }

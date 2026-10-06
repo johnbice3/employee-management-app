@@ -56,4 +56,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
         employeeRepository.save(employee);
     }
+    @Override 
+    public void updateManager(Long id, Long managerId){
+        Employee employee = getEmployeeInfo(id);
+        Employee manager = getEmployeeInfo(managerId);
+
+        employee.setManager(manager);
+        employeeRepository.save(employee);
+    }
+    @Override
+    public List<Employee> listEmployeesReportingToManager(Long managerId){
+        Employee manager = getEmployeeInfo(managerId);
+
+        return employeeRepository.findByManager(manager);
+    }
 }

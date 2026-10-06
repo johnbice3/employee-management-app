@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Employee {
@@ -23,6 +24,8 @@ public class Employee {
     private Department department;
     private BigDecimal salary;
     private LocalDate hireDate;
+    @ManyToOne
+    private Employee manager;
 
     public Employee(String firstName, String lastName, String email, LocalDate hireDate){
         this.firstName = firstName;
@@ -59,6 +62,9 @@ public class Employee {
     public BigDecimal getSalary(){
         return this.salary;
     }
+    public Employee getManager(){
+        return this.manager;
+    }
     public void setSalary(BigDecimal salary){
         this.salary = salary;
     }
@@ -67,5 +73,8 @@ public class Employee {
     }
     public void setJobTitle(String jobTitle){
         this.jobTitle = jobTitle;
+    }
+    public void setManager(Employee manager){
+        this.manager = manager;
     }
 }

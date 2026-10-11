@@ -21,4 +21,6 @@ public interface EmployeeService {
     public void updateManager(Long id, Long managerId);
 
     public List<Employee> listEmployeesReportingToManager(Long managerId);
+
+    public List<Employee> allReportsInHierarchy(Long managerId);
 }

@@ -2,8 +2,11 @@ package com.example.employee_management;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
 import org.springframework.stereotype.Service;
 
@@ -69,5 +72,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee manager = getEmployeeInfo(managerId);
 
         return employeeRepository.findByManager(manager);
+    }
+    @Override
+    public List<Employee> allReportsInHierarchy(Long managerId){
+        List<Employee> employeesInHierarchy = new ArrayList<>();
+        Queue<Employee> employeeQueue = new LinkedList<>();
+        List<Employee> managerDirectReports = listEmployeesReportingToManager(managerId);
+        employeeQueue.addAll(managerDirectReports);
+        employeesInHierarchy.addAll(managerDirectReports);
+
+        while (!employeeQueue.isEmpty()){
+            Employee nextEEInQueue = employeeQueue.poll();
+            List<Employee> returnedEmployees = listEmployeesReportingToManager(nextEEInQueue.getId());
+            employeesInHierarchy.addAll(returnedEmployees);
+            employeeQueue.addAll(returnedEmployees);
+        }
+
+        return employeesInHierarchy;
     }
 }

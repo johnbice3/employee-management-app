@@ -68,5 +68,5 @@ public class EmployeeController {
     @GetMapping("/{managerId}/all-reports")
     public List<Employee> listAllEmployeesInHierarchy(@PathVariable Long managerId){
         return employeeService.allReportsInHierarchy(managerId);
-    }
+    } 
 }

@@ -9,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import java.util.Map;
 import java.util.HashMap;
 
-
-
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
@@ -29,5 +26,9 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessages);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> illegalArgumentExceptionHandler(IllegalArgumentException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }

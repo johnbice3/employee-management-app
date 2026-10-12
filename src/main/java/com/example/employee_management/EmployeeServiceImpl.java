@@ -61,8 +61,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @Override 
     public void updateManager(Long id, Long managerId){
+        
+        if (id.equals(managerId)){
+            throw new IllegalArgumentException("Employee cannot be assigned as their own manager.");
+        }
         Employee employee = getEmployeeInfo(id);
         Employee manager = getEmployeeInfo(managerId);
+        Employee checkManager = manager;
+        while (checkManager != null){
+            if (checkManager.getId().equals(id)){
+                throw new IllegalArgumentException("Submitted ID is already in this employee's reporting chain.");
+            }
+            checkManager = checkManager.getManager();
+        }
 
         employee.setManager(manager);
         employeeRepository.save(employee);

@@ -19,8 +19,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee createEmployee(String firstName, String lastName, String email, LocalDate hireDate){
-        Employee newEmployee = new Employee(firstName, lastName, email, hireDate);
+    public Employee createEmployee(Company employer, String firstName, String lastName, String email, LocalDate hireDate, String employeeNumber){
+        Employee newEmployee = new Employee(employer, firstName, lastName, email, hireDate);
+        newEmployee.setEmployeeNumber(employeeNumber);
         
         return employeeRepository.save(newEmployee);
     }

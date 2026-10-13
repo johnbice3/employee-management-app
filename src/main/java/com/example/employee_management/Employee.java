@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Employee {
@@ -26,8 +27,13 @@ public class Employee {
     private LocalDate hireDate;
     @ManyToOne
     private Employee manager;
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    private Company employer;
+    private String employeeNumber;
 
-    public Employee(String firstName, String lastName, String email, LocalDate hireDate){
+    public Employee(Company employer, String firstName, String lastName, String email, LocalDate hireDate){
+        this.employer = employer;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -65,6 +71,12 @@ public class Employee {
     public Employee getManager(){
         return this.manager;
     }
+    public Company getEmployer(){
+        return this.employer;
+    }
+    public String getEmployeeNumber(){
+        return this.employeeNumber;
+    }
     public void setSalary(BigDecimal salary){
         this.salary = salary;
     }
@@ -76,5 +88,8 @@ public class Employee {
     }
     public void setManager(Employee manager){
         this.manager = manager;
+    }
+    public void setEmployeeNumber(String employeeNumber){
+        this.employeeNumber = employeeNumber;
     }
 }

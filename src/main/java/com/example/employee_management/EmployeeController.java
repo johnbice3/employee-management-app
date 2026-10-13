@@ -31,7 +31,7 @@ public class EmployeeController {
 
     @PostMapping
     public Employee createEmployeeByRequest(@RequestBody @Valid CreateEmployeeRequest request){
-        return employeeService.createEmployee(request.getFirstName(), request.getLastName(), request.getEmail(), request.getHireDate());
+        return employeeService.createEmployee(request.getEmployer(), request.getFirstName(), request.getLastName(), request.getEmail(), request.getHireDate(), request.getEmployeeNumber());
     }
     @PutMapping ("/{id}/salary")
     public ResponseEntity<String> salaryUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateSalaryRequest request){

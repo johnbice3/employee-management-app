@@ -18,6 +18,8 @@ import java.lang.reflect.Field;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
+    private Company testCompany;
+
     @Mock 
     EmployeeRepository testRepository;
     @InjectMocks 
@@ -36,8 +38,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     void shouldThrowIllegalExceptionForCircularManagerChain() throws NoSuchFieldException, IllegalAccessException {
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
-        Employee secondTestEmployee = new Employee("Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee secondTestEmployee = new Employee(testCompany, "Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
         
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -61,8 +63,8 @@ public class EmployeeServiceImplTest {
 
     @Test
     void shouldSuccessfullyUpdateManagerIfValid() throws NoSuchFieldException, IllegalAccessException{
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
-        Employee secondTestEmployee = new Employee("Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee secondTestEmployee = new Employee(testCompany, "Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
         
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -92,7 +94,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     void shouldThrowEmployeeNotFoundExceptionWhenManagerIdDoesNotExist() throws NoSuchFieldException, IllegalAccessException{
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
         
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -113,9 +115,9 @@ public class EmployeeServiceImplTest {
     
     @Test
     void shouldReturnDirectAndIndirectReportsInHierarchy() throws NoSuchFieldException, IllegalAccessException{
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
-        Employee secondTestEmployee = new Employee("Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
-        Employee thirdTestEmployee = new Employee("Cheddar", "Bice", "cheddarbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee secondTestEmployee = new Employee(testCompany, "Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
+        Employee thirdTestEmployee = new Employee(testCompany, "Cheddar", "Bice", "cheddarbice@test.com", LocalDate.of(2026, 10, 12));
 
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -148,7 +150,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     void shouldReturnEmptyListForManagerWithNoDirectReports() throws NoSuchFieldException, IllegalAccessException{
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
 
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -166,10 +168,10 @@ public class EmployeeServiceImplTest {
 
     @Test
     void shouldReturnAllDirectAndIndirectReportsInHierarchy() throws NoSuchFieldException, IllegalAccessException{
-        Employee firstTestEmployee = new Employee("Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
-        Employee secondTestEmployee = new Employee("Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
-        Employee thirdTestEmployee = new Employee("Cheddar", "Bice", "cheddarbice@test.com", LocalDate.of(2026, 10, 12));
-        Employee fourthTestEmployee = new Employee("John", "Bice", "johnbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee secondTestEmployee = new Employee(testCompany, "Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
+        Employee thirdTestEmployee = new Employee(testCompany, "Cheddar", "Bice", "cheddarbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee fourthTestEmployee = new Employee(testCompany, "John", "Bice", "johnbice@test.com", LocalDate.of(2026, 10, 12));
 
         Field idField = Employee.class.getDeclaredField("id");
         idField.setAccessible(true);

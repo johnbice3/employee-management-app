@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class CreateEmployeeRequest {
+    @NotNull
+    private Company employer;
     @NotBlank
     private String firstName;
     @NotBlank
@@ -15,11 +17,14 @@ public class CreateEmployeeRequest {
     private String email;
     @NotNull
     private LocalDate hireDate;
+    private String employeeNumber;
 
     public CreateEmployeeRequest(){
 
     }
-
+    public void setEmployer(Company employer){
+        this.employer = employer;
+    }
     public void setFirstName(String firstName){
         this.firstName = firstName;
     }
@@ -32,6 +37,12 @@ public class CreateEmployeeRequest {
     public void setHireDate(LocalDate hireDate){
         this.hireDate = hireDate;
     }
+    public void setEmployeeNumber(String employeeNumber){
+        this.employeeNumber = employeeNumber;
+    }
+    public Company getEmployer(){
+        return this.employer;
+    }
     public String getFirstName(){
         return this.firstName;
     }
@@ -43,5 +54,8 @@ public class CreateEmployeeRequest {
     }
     public LocalDate getHireDate(){
         return this.hireDate;
+    }
+    public String getEmployeeNumber(){
+        return this.employeeNumber;
     }
 }

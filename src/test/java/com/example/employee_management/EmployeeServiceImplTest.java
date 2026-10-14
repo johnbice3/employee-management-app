@@ -1,24 +1,26 @@
 package com.example.employee_management;
 
+import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import java.util.Optional;
-import java.util.List;
-import java.time.LocalDate;
-import java.lang.reflect.Field;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
-    private Company testCompany;
+    Company testCompany = new Company("Test Company");
 
     @Mock 
     EmployeeRepository testRepository;
@@ -207,5 +209,19 @@ public class EmployeeServiceImplTest {
         assertTrue(firstEmployeeHierarchy.contains(secondTestEmployee));
         assertTrue(firstEmployeeHierarchy.contains(thirdTestEmployee));
         assertTrue(firstEmployeeHierarchy.contains(fourthTestEmployee));
+    }
+    @Test 
+    void shouldTrimWhitespaceFromEmployeeNumber(){
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "johnbice3@test.com", LocalDate.of(2026, 10, 14));
+        Employee secondTestEmployee = new Employee(testCompany, "John", "Bice", "johnbice3@test.com", LocalDate.of(2026, 10, 14));
+        Employee thirdTestEmployee = new Employee(testCompany, "Jayce", "Bice", "johnbice3@test.com", LocalDate.of(2026, 10, 14));
+        testEmployee.setEmployeeNumber("  00125   ");
+        secondTestEmployee.setEmployeeNumber("");
+        thirdTestEmployee.setEmployeeNumber(null);
+
+        assertEquals("00125", testEmployee.getEmployeeNumber());
+        assertNull(null, secondTestEmployee.getEmployeeNumber());
+        assertNull(null, thirdTestEmployee.getEmployeeNumber());
+
     }
 }

@@ -8,8 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Employee {
@@ -90,6 +90,10 @@ public class Employee {
         this.manager = manager;
     }
     public void setEmployeeNumber(String employeeNumber){
-        this.employeeNumber = employeeNumber;
+        if (employeeNumber == null || employeeNumber.isBlank()){
+            this.employeeNumber = null;
+        } else {
+            this.employeeNumber = employeeNumber.trim();
+        }
     }
 }

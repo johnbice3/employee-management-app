@@ -24,6 +24,8 @@ public class EmployeeServiceImplTest {
 
     @Mock 
     EmployeeRepository testRepository;
+    @Mock
+    CompanyRepository testCompanyRepository;
     @InjectMocks 
     EmployeeServiceImpl testServiceImpl;
 
@@ -223,5 +225,60 @@ public class EmployeeServiceImplTest {
         assertNull(null, secondTestEmployee.getEmployeeNumber());
         assertNull(null, thirdTestEmployee.getEmployeeNumber());
 
+    }
+    @Test
+    void shouldReturnEmployeeBelongingToEmployer() throws NoSuchFieldException, IllegalAccessException{
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "johnbice3@test.com", LocalDate.of(2026, 10, 14));
+        
+        Field idField = Employee.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(testEmployee, 1L);
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
+            .thenReturn(Optional.of(testEmployee));
+
+        assertEquals(testEmployee,testServiceImpl.findEmployeeByIdAndEmployer(1L, testCompany));
+    }
+    @Test 
+    void shouldThrowExceptionWhenEmployeeDoesNotExistInCompany(){
+        EmployeeNotFoundException exception = assertThrows(
+            EmployeeNotFoundException.class,
+            () -> testServiceImpl.findEmployeeByIdAndEmployer(1L, testCompany)
+        );
+        assertEquals("Employee does not exist.", exception.getMessage());
+    }
+    @Test
+    void shouldReturnAllEmployeesForProvidedEmployer(){
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice3@test.com", LocalDate.of(2026, 10, 14));
+        Employee secondTestEmployee = new Employee(testCompany, "John", "Bice", "johnbice3@test.com", LocalDate.of(2026, 10, 14));
+
+        when (testRepository.findByEmployer(testCompany))
+            .thenReturn(List.of(testEmployee, secondTestEmployee)
+        );
+
+        List<Employee> expectedListOfEmployees = List.of(testEmployee, secondTestEmployee);
+        
+        List<Employee> employeesInCompany = testServiceImpl.listEmployeesByEmployer(testCompany);
+
+        assertEquals(expectedListOfEmployees, employeesInCompany);   
+    }
+    @Test 
+    void shouldReturnValidCompanyInfo() throws NoSuchFieldException, IllegalAccessException{
+        Field idField = Company.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(testCompany, 1L);
+
+        when (testCompanyRepository.findById(1L))
+            .thenReturn(Optional.of(testCompany));
+        
+        assertEquals(testCompany, testServiceImpl.getCompanyInfo(1L));
+    }
+    @Test 
+    void shouldThrowExceptionWhenCompanyDoesNotExist(){
+        CompanyNotFoundException exception = assertThrows(
+            CompanyNotFoundException.class, 
+            () -> testServiceImpl.getCompanyInfo(1L)
+        );
+
+        assertEquals("That company does not exist", exception.getMessage());
     }
 }

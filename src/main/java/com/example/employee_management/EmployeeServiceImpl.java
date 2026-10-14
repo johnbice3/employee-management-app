@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final CompanyRepository companyRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository){
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, CompanyRepository companyRepository){
         this.employeeRepository = employeeRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -33,15 +35,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         return result.orElseThrow(() -> 
             new EmployeeNotFoundException("That employee does not exist"));
     }
-    
+    @Override
+    public Company getCompanyInfo(Long id){
+        Optional<Company> result = companyRepository.findById(id);
+
+        return result.orElseThrow(() ->
+            new CompanyNotFoundException("That company does not exist"));
+    }
     @Override
     public List<Employee> listAllEmployees(){
         return employeeRepository.findAll();
     }
 
     @Override
-    public void updateSalary(Long id, BigDecimal salary){
-        Employee employee = getEmployeeInfo(id);
+    public void updateSalary(Company employer, Long id, BigDecimal salary){
+        Employee employee = findEmployeeByIdAndEmployer(id, employer);
         employee.setSalary(salary);
         employeeRepository.save(employee);
     }
@@ -101,5 +109,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return employeesInHierarchy;
+    }
+    public Employee findEmployeeByIdAndEmployer(Long id, Company employer){
+        Optional<Employee> result = employeeRepository.findByIdAndEmployer(id, employer);
+
+        return result.orElseThrow(() -> 
+            new EmployeeNotFoundException("Employee does not exist.")
+        );
+    }
+    public List<Employee> listEmployeesByEmployer(Company employer){
+        return employeeRepository.findByEmployer(employer);
     }
 }

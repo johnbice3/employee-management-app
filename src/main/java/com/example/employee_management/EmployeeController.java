@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.validation.Valid;
 
@@ -19,6 +20,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
+    @Value("${app.development-company-id}")
+    private Long developmentCompanyId;
 
     public EmployeeController(EmployeeService employeeService){
         this.employeeService = employeeService;
@@ -28,14 +31,14 @@ public class EmployeeController {
     public Employee findById(@PathVariable Long id){
         return employeeService.getEmployeeInfo(id);
     } 
-
     @PostMapping
     public Employee createEmployeeByRequest(@RequestBody @Valid CreateEmployeeRequest request){
         return employeeService.createEmployee(request.getEmployer(), request.getFirstName(), request.getLastName(), request.getEmail(), request.getHireDate(), request.getEmployeeNumber());
     }
     @PutMapping ("/{id}/salary")
     public ResponseEntity<String> salaryUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateSalaryRequest request){
-        employeeService.updateSalary(id, request.getSalary());
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        employeeService.updateSalary(employer, id, request.getSalary());
 
         return ResponseEntity.ok("Salary updated successfully");
     }

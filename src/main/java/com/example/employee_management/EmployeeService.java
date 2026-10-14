@@ -10,9 +10,11 @@ public interface EmployeeService {
 
     public Employee getEmployeeInfo(Long id);
 
+    public Company getCompanyInfo(Long id);
+
     public List<Employee> listAllEmployees();
 
-    public void updateSalary(Long id, BigDecimal salary);
+    public void updateSalary(Company employer, Long id, BigDecimal salary);
 
     public void updateJobTitle(Long id, String jobTitle);
 

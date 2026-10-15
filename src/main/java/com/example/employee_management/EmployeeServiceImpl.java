@@ -55,27 +55,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updateJobTitle(Long id, String jobTitle){
-        Employee employee = getEmployeeInfo(id);
+    public void updateJobTitle(Company employer, Long id, String jobTitle){
+        Employee employee = findEmployeeByIdAndEmployer(id, employer);
         employee.setJobTitle(jobTitle);
         employeeRepository.save(employee);
     }
 
     @Override
-    public void updateDepartment(Long id, String departmentCode, String departmentName){
-        Employee employee = getEmployeeInfo(id);
+    public void updateDepartment(Company employer, Long id, String departmentCode, String departmentName){
+        Employee employee = findEmployeeByIdAndEmployer(id, employer);
         Department department = new Department(departmentCode, departmentName);
         employee.setDepartment(department);
         employeeRepository.save(employee);
     }
     @Override 
-    public void updateManager(Long id, Long managerId){
+    public void updateManager(Company employer, Long id, Long managerId){
         
         if (id.equals(managerId)){
             throw new IllegalArgumentException("Employee cannot be assigned as their own manager.");
         }
-        Employee employee = getEmployeeInfo(id);
-        Employee manager = getEmployeeInfo(managerId);
+        Employee employee = findEmployeeByIdAndEmployer(id, employer);
+        Employee manager = findEmployeeByIdAndEmployer(managerId, employer);
         Employee checkManager = manager;
         while (checkManager != null){
             if (checkManager.getId().equals(id)){

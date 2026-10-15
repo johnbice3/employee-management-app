@@ -33,7 +33,7 @@ public class EmployeeServiceImplTest {
     void shouldThrowExceptionForEmployeeManagingSelf(){
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class, 
-            () -> testServiceImpl.updateManager(2L,2L)
+            () -> testServiceImpl.updateManager(testCompany,2L,2L)
         );
 
         assertEquals("Employee cannot be assigned as their own manager.", exception.getMessage());
@@ -52,14 +52,14 @@ public class EmployeeServiceImplTest {
 
         secondTestEmployee.setManager(firstTestEmployee);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findById(2L))
+        when(testRepository.findByIdAndEmployer(2L, testCompany))
             .thenReturn(Optional.of(secondTestEmployee));
 
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class, 
-            () -> testServiceImpl.updateManager(1L, 2L)
+            () -> testServiceImpl.updateManager(testCompany, 1L, 2L)
         );
 
         assertEquals("Submitted ID is already in this employee's reporting chain.", exception.getMessage());
@@ -75,12 +75,12 @@ public class EmployeeServiceImplTest {
         idField.set(firstTestEmployee, 1L);
         idField.set(secondTestEmployee, 2L);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findById(2L))
+        when(testRepository.findByIdAndEmployer(2L, testCompany))
             .thenReturn(Optional.of(secondTestEmployee));
 
-        testServiceImpl.updateManager(2L, 1L);
+        testServiceImpl.updateManager(testCompany, 2L, 1L);
 
         assertEquals(firstTestEmployee, secondTestEmployee.getManager());
         verify(testRepository).save(secondTestEmployee);
@@ -90,10 +90,10 @@ public class EmployeeServiceImplTest {
     void shouldThrowEmployeeNotFoundExceptionWhenEmployeeDoesNotExist() {
         EmployeeNotFoundException exception = assertThrows(
             EmployeeNotFoundException.class, 
-            () -> testServiceImpl.updateManager(1L, 2L)
+            () -> testServiceImpl.updateManager(testCompany, 1L, 2L)
         );
 
-        assertEquals("That employee does not exist", exception.getMessage());
+        assertEquals("Employee does not exist.", exception.getMessage());
     }
 
     @Test
@@ -104,17 +104,17 @@ public class EmployeeServiceImplTest {
         idField.setAccessible(true);
         idField.set(firstTestEmployee, 1L);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findById(2L))
+        when(testRepository.findByIdAndEmployer(2L, testCompany))
             .thenReturn(Optional.empty());
 
         EmployeeNotFoundException exception = assertThrows(
             EmployeeNotFoundException.class,
-            () -> testServiceImpl.updateManager(1L, 2L)
+            () -> testServiceImpl.updateManager(testCompany, 1L, 2L)
         );
 
-        assertEquals("That employee does not exist", exception.getMessage());
+        assertEquals("Employee does not exist.", exception.getMessage());
     }
     
     @Test
@@ -280,5 +280,36 @@ public class EmployeeServiceImplTest {
         );
 
         assertEquals("That company does not exist", exception.getMessage());
+    }
+    @Test 
+    void shouldSuccessfullyUpdateJobTitle() throws NoSuchFieldException, IllegalAccessException{
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice3@test.com", LocalDate.of(2026, 10, 14));
+       
+        Field idField = Employee.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(testEmployee, 1L);
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
+            .thenReturn(Optional.of(testEmployee));
+        
+        testServiceImpl.updateJobTitle(testCompany, 1L, "HRIS Analyst");    
+
+        assertEquals("HRIS Analyst", testEmployee.getJobTitle());
+        verify(testRepository).save(testEmployee);
+    }
+    @Test 
+    void shouldSuccessfullyUpdateDepartment() throws NoSuchFieldException, IllegalAccessException{
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice3@test.com", LocalDate.of(2026, 10, 14));
+       
+        Field idField = Employee.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(testEmployee, 1L);
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
+            .thenReturn(Optional.of(testEmployee));
+
+        testServiceImpl.updateDepartment(testCompany, 1L, "0420", "Human Resources");
+
+        assertEquals("0420", testEmployee.getDepartment().getDepartmentCode());
+        assertEquals("Human Resources", testEmployee.getDepartment().getDepartmentName());
+        verify(testRepository).save(testEmployee);
     }
 }

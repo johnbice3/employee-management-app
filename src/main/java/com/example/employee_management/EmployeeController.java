@@ -1,6 +1,7 @@
 package com.example.employee_management;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.validation.Valid;
 
@@ -44,13 +44,15 @@ public class EmployeeController {
     }
     @PutMapping ("/{id}/jobTitle")
     public ResponseEntity<String> jobTitleUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateJobTitleRequest request){
-        employeeService.updateJobTitle(id, request.getJobTitle());
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        employeeService.updateJobTitle(employer, id, request.getJobTitle());
 
         return ResponseEntity.ok("Job Title updated successfully");
     }
     @PutMapping ("/{id}/department")
     public ResponseEntity<String> departmentUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateDepartmentRequest request){
-        employeeService.updateDepartment(id, request.getDepartmentCode(), request.getDepartmentName());
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        employeeService.updateDepartment(employer, id, request.getDepartmentCode(), request.getDepartmentName());
 
         return ResponseEntity.ok("Department updated successfully");
     }
@@ -60,7 +62,8 @@ public class EmployeeController {
     }
     @PutMapping("/{id}/manager")
     public ResponseEntity<String> managerUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateManagerRequest request) {
-        employeeService.updateManager(id, request.getManagerId());
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        employeeService.updateManager(employer, id, request.getManagerId());
 
         return ResponseEntity.ok("Manager updated successfully");
     }

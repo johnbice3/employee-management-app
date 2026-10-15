@@ -16,11 +16,11 @@ public interface EmployeeService {
 
     public void updateSalary(Company employer, Long id, BigDecimal salary);
 
-    public void updateJobTitle(Long id, String jobTitle);
+    public void updateJobTitle(Company employer, Long id, String jobTitle);
 
-    public void updateDepartment(Long id, String departmentCode, String departmentName);
+    public void updateDepartment(Company employer, Long id, String departmentCode, String departmentName);
 
-    public void updateManager(Long id, Long managerId);
+    public void updateManager(Company employer, Long id, Long managerId);
 
     public List<Employee> listEmployeesReportingToManager(Long managerId);
 

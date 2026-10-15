@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepository extends JpaRepository <Employee, Long>{
     
-    public List<Employee> findByManager(Employee manager);
+    public List<Employee> findByEmployerAndManager(Company employer, Employee manager);
     
     public List<Employee> findByEmployer(Company employer);
 

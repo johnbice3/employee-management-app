@@ -88,22 +88,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
     }
     @Override
-    public List<Employee> listEmployeesReportingToManager(Long managerId){
-        Employee manager = getEmployeeInfo(managerId);
+    public List<Employee> listEmployeesReportingToManager(Company employer, Long managerId){
+        Employee manager = findEmployeeByIdAndEmployer(managerId, employer);
 
-        return employeeRepository.findByManager(manager);
+        return employeeRepository.findByEmployerAndManager(employer, manager);
     }
     @Override
-    public List<Employee> allReportsInHierarchy(Long managerId){
+    public List<Employee> allReportsInHierarchy(Company employer, Long managerId){
         List<Employee> employeesInHierarchy = new ArrayList<>();
         Queue<Employee> employeeQueue = new LinkedList<>();
-        List<Employee> managerDirectReports = listEmployeesReportingToManager(managerId);
+        List<Employee> managerDirectReports = listEmployeesReportingToManager(employer, managerId);
         employeeQueue.addAll(managerDirectReports);
         employeesInHierarchy.addAll(managerDirectReports);
 
         while (!employeeQueue.isEmpty()){
             Employee nextEEInQueue = employeeQueue.poll();
-            List<Employee> returnedEmployees = listEmployeesReportingToManager(nextEEInQueue.getId());
+            List<Employee> returnedEmployees = listEmployeesReportingToManager(employer, nextEEInQueue.getId());
             employeesInHierarchy.addAll(returnedEmployees);
             employeeQueue.addAll(returnedEmployees);
         }

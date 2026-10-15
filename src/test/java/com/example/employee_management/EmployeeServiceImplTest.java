@@ -132,20 +132,20 @@ public class EmployeeServiceImplTest {
         secondTestEmployee.setManager(firstTestEmployee);
         thirdTestEmployee.setManager(secondTestEmployee);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findById(2L))
+        when(testRepository.findByIdAndEmployer(2L, testCompany))
             .thenReturn(Optional.of(secondTestEmployee));
-        when(testRepository.findById(3L))
+        when(testRepository.findByIdAndEmployer(3L, testCompany))
             .thenReturn(Optional.of(thirdTestEmployee));    
-        when(testRepository.findByManager(firstTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, firstTestEmployee))
             .thenReturn(List.of(secondTestEmployee));
-        when(testRepository.findByManager(secondTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, secondTestEmployee))
             .thenReturn(List.of(thirdTestEmployee));
-        when(testRepository.findByManager(thirdTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, thirdTestEmployee))
             .thenReturn(List.of());
         
-        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(1L);
+        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(testCompany, 1L);
 
         assertEquals(2, firstEmployeeHierarchy.size());
         assertTrue(firstEmployeeHierarchy.contains(secondTestEmployee));
@@ -160,12 +160,12 @@ public class EmployeeServiceImplTest {
         idField.setAccessible(true);
         idField.set(firstTestEmployee, 1L);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findByManager(firstTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, firstTestEmployee))
             .thenReturn(List.of());   
 
-        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(1L);
+        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(testCompany, 1L);
 
         assertTrue(firstEmployeeHierarchy.isEmpty());
     }
@@ -188,24 +188,24 @@ public class EmployeeServiceImplTest {
         thirdTestEmployee.setManager(secondTestEmployee);
         fourthTestEmployee.setManager(firstTestEmployee);
 
-        when(testRepository.findById(1L))
+        when(testRepository.findByIdAndEmployer(1L, testCompany))
             .thenReturn(Optional.of(firstTestEmployee));
-        when(testRepository.findById(2L))
+        when(testRepository.findByIdAndEmployer(2L, testCompany))
             .thenReturn(Optional.of(secondTestEmployee));
-        when(testRepository.findById(3L))
+        when(testRepository.findByIdAndEmployer(3L, testCompany))
             .thenReturn(Optional.of(thirdTestEmployee));    
-        when(testRepository.findById(4L))
+        when(testRepository.findByIdAndEmployer(4L, testCompany))
             .thenReturn(Optional.of(fourthTestEmployee)); 
-        when(testRepository.findByManager(firstTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, firstTestEmployee))
             .thenReturn(List.of(secondTestEmployee, fourthTestEmployee));
-        when(testRepository.findByManager(secondTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, secondTestEmployee))
             .thenReturn(List.of(thirdTestEmployee));
-        when(testRepository.findByManager(thirdTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, thirdTestEmployee))
             .thenReturn(List.of());
-        when(testRepository.findByManager(fourthTestEmployee))
+        when(testRepository.findByEmployerAndManager(testCompany, fourthTestEmployee))
             .thenReturn(List.of());
         
-        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(1L);
+        List<Employee> firstEmployeeHierarchy = testServiceImpl.allReportsInHierarchy(testCompany, 1L);
 
         assertEquals(3, firstEmployeeHierarchy.size());
         assertTrue(firstEmployeeHierarchy.contains(secondTestEmployee));
@@ -222,8 +222,8 @@ public class EmployeeServiceImplTest {
         thirdTestEmployee.setEmployeeNumber(null);
 
         assertEquals("00125", testEmployee.getEmployeeNumber());
-        assertNull(null, secondTestEmployee.getEmployeeNumber());
-        assertNull(null, thirdTestEmployee.getEmployeeNumber());
+        assertNull(secondTestEmployee.getEmployeeNumber());
+        assertNull(thirdTestEmployee.getEmployeeNumber());
 
     }
     @Test

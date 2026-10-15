@@ -69,10 +69,12 @@ public class EmployeeController {
     }
     @GetMapping("/{managerId}/direct-reports")
     public List<Employee> listEmployeesReportToManager(@PathVariable Long managerId){
-        return employeeService.listEmployeesReportingToManager(managerId);
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        return employeeService.listEmployeesReportingToManager(employer, managerId);
     }
     @GetMapping("/{managerId}/all-reports")
     public List<Employee> listAllEmployeesInHierarchy(@PathVariable Long managerId){
-        return employeeService.allReportsInHierarchy(managerId);
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        return employeeService.allReportsInHierarchy(employer, managerId);
     } 
 }

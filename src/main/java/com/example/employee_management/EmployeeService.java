@@ -22,7 +22,7 @@ public interface EmployeeService {
 
     public void updateManager(Company employer, Long id, Long managerId);
 
-    public List<Employee> listEmployeesReportingToManager(Long managerId);
+    public List<Employee> listEmployeesReportingToManager(Company employer, Long managerId);
 
-    public List<Employee> allReportsInHierarchy(Long managerId);
+    public List<Employee> allReportsInHierarchy(Company employer, Long managerId);
 }

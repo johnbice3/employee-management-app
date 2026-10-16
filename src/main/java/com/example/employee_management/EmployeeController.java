@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/employees")
@@ -29,7 +28,8 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee findById(@PathVariable Long id){
-        return employeeService.getEmployeeInfo(id);
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+        return employeeService.getEmployeeInfo(id, employer);
     } 
     @PostMapping
     public Employee createEmployeeByRequest(@RequestBody @Valid CreateEmployeeRequest request){
@@ -58,7 +58,9 @@ public class EmployeeController {
     }
     @GetMapping
     public List<Employee> listAllEmployees(){
-        return employeeService.listAllEmployees();
+        Company employer = employeeService.getCompanyInfo(developmentCompanyId);
+
+        return employeeService.listAllEmployees(employer);
     }
     @PutMapping("/{id}/manager")
     public ResponseEntity<String> managerUpdateRequest(@PathVariable Long id, @RequestBody @Valid UpdateManagerRequest request) {

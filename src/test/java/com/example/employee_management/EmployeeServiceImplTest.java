@@ -2,11 +2,13 @@ package com.example.employee_management;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
@@ -279,7 +281,7 @@ public class EmployeeServiceImplTest {
             () -> testServiceImpl.getCompanyInfo(1L)
         );
 
-        assertEquals("That company does not exist", exception.getMessage());
+        assertEquals("Company does not exist.", exception.getMessage());
     }
     @Test 
     void shouldSuccessfullyUpdateJobTitle() throws NoSuchFieldException, IllegalAccessException{
@@ -311,5 +313,53 @@ public class EmployeeServiceImplTest {
         assertEquals("0420", testEmployee.getDepartment().getDepartmentCode());
         assertEquals("Human Resources", testEmployee.getDepartment().getDepartmentName());
         verify(testRepository).save(testEmployee);
+    }
+    @Test 
+    void shouldReturnEmployeeWhenFoundForEmployer() throws NoSuchFieldException, IllegalAccessException{
+        Employee testEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice3@test.com", LocalDate.of(2026, 10, 14));
+       
+        Field idField = Employee.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(testEmployee, 1L);
+
+        when (testRepository.findByIdAndEmployer(1L, testCompany))
+            .thenReturn(Optional.of(testEmployee));
+
+        assertSame(testEmployee, testServiceImpl.getEmployeeInfo(1L , testCompany));
+    }
+    @Test
+    void shouldThrowEmployeeNotFoundExceptionWhenNotFoundForEmployer(){
+        when (testRepository.findByIdAndEmployer(1L , testCompany))
+            .thenReturn(Optional.empty());
+        
+        EmployeeNotFoundException exception = assertThrows(
+            EmployeeNotFoundException.class,
+            () -> testServiceImpl.getEmployeeInfo(1L, testCompany)
+        );
+
+        assertEquals("Employee does not exist.", exception.getMessage());
+    }
+    @Test 
+    void shouldReturnAllEmployeesForCompany(){
+        Employee firstTestEmployee = new Employee(testCompany, "Jack", "Bice", "jackbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee secondTestEmployee = new Employee(testCompany, "Jayce", "Bice", "jaycebice@test.com", LocalDate.of(2026, 10, 12));
+        Employee thirdTestEmployee = new Employee(testCompany, "Cheddar", "Bice", "cheddarbice@test.com", LocalDate.of(2026, 10, 12));
+        Employee fourthTestEmployee = new Employee(testCompany, "John", "Bice", "johnbice@test.com", LocalDate.of(2026, 10, 12));
+
+        List<Employee> employees = List.of(firstTestEmployee, secondTestEmployee, thirdTestEmployee, fourthTestEmployee);
+
+        when (testRepository.findByEmployer(testCompany))
+            .thenReturn(employees);
+
+        assertEquals(employees, testServiceImpl.listAllEmployees(testCompany));
+    }
+    @Test 
+    void shouldReturnAnEmptyListWhenEmployerHasNoEmployees(){
+        when (testRepository.findByEmployer(testCompany))
+            .thenReturn(Collections.emptyList());
+        
+        List<Employee> employees = testServiceImpl.listAllEmployees(testCompany);
+
+        assertTrue(employees.isEmpty());
     }
 }

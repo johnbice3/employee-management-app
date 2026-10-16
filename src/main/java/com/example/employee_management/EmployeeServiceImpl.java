@@ -29,22 +29,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeInfo(Long id){
-        Optional<Employee> result = employeeRepository.findById(id);
+    public Employee getEmployeeInfo(Long id, Company employer){
+        Optional<Employee> result = employeeRepository.findByIdAndEmployer(id, employer);
 
         return result.orElseThrow(() -> 
-            new EmployeeNotFoundException("That employee does not exist"));
+            new EmployeeNotFoundException("Employee does not exist."));
     }
     @Override
     public Company getCompanyInfo(Long id){
         Optional<Company> result = companyRepository.findById(id);
 
         return result.orElseThrow(() ->
-            new CompanyNotFoundException("That company does not exist"));
+            new CompanyNotFoundException("Company does not exist."));
     }
     @Override
-    public List<Employee> listAllEmployees(){
-        return employeeRepository.findAll();
+    public List<Employee> listAllEmployees(Company employer){
+
+        return employeeRepository.findByEmployer(employer);
     }
 
     @Override

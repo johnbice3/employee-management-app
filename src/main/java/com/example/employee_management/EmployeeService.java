@@ -8,11 +8,11 @@ public interface EmployeeService {
     
     public Employee createEmployee(Company employer, String firstName, String lastName, String email, LocalDate hireDate, String employeeNumber);
 
-    public Employee getEmployeeInfo(Long id);
+    public Employee getEmployeeInfo(Long id, Company employer);
 
     public Company getCompanyInfo(Long id);
 
-    public List<Employee> listAllEmployees();
+    public List<Employee> listAllEmployees(Company employer);
 
     public void updateSalary(Company employer, Long id, BigDecimal salary);
 

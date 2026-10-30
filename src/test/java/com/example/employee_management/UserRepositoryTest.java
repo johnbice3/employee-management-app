@@ -1,9 +1,11 @@
 package com.example.employee_management;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @DataJpaTest 
 public class UserRepositoryTest {
@@ -23,5 +25,27 @@ public class UserRepositoryTest {
         assertEquals("testUser1", result.getUserName());
         assertEquals("testUser1@test.com", resultEmail.getEmail());
         
+    }
+    @Test
+    void shouldRejectDuplicateEmail(){
+        Company testCompany = companyRepository.save(new Company("Development Company"));
+        userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser1@test.com"));
+        userRepository.flush();
+        
+        DataIntegrityViolationException exception = assertThrows(
+            DataIntegrityViolationException.class,
+            () -> userRepository.save(new User(testCompany, "testUser2", "testPassword","testUser1@test.com"))
+        );
+    }
+    @Test
+    void shouldRejectDuplicateUserName(){
+        Company testCompany = companyRepository.save(new Company("Development Company"));
+        userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser1@test.com"));
+        userRepository.flush();
+                
+        DataIntegrityViolationException exception = assertThrows(
+            DataIntegrityViolationException.class,
+            () -> userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser2@test.com"))
+        );
     }
 }

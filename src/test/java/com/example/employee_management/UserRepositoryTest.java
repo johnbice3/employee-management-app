@@ -32,7 +32,7 @@ public class UserRepositoryTest {
         userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser1@test.com"));
         userRepository.flush();
         
-        DataIntegrityViolationException exception = assertThrows(
+        assertThrows(
             DataIntegrityViolationException.class,
             () -> userRepository.save(new User(testCompany, "testUser2", "testPassword","testUser1@test.com"))
         );
@@ -43,7 +43,7 @@ public class UserRepositoryTest {
         userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser1@test.com"));
         userRepository.flush();
                 
-        DataIntegrityViolationException exception = assertThrows(
+        assertThrows(
             DataIntegrityViolationException.class,
             () -> userRepository.save(new User(testCompany, "testUser1", "testPassword","testUser2@test.com"))
         );

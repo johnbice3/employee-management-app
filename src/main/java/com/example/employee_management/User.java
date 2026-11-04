@@ -49,4 +49,10 @@ public class User {
     public String getEmail(){
         return this.email;
     }
+    public Company getEmployer(){
+        return this.employer;
+    }
+    public String getPassword(){
+        return this.password;
+    }
 }

@@ -16,11 +16,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User createUser(Long companyId, String username, String password, String email){
+    public User createUser(Long companyId, String userName, String password, String email){
         Company company = companyRepository.findById(companyId).orElseThrow(() -> 
             new CompanyNotFoundException("Company does not exist with the provided ID"));
         
-        if (userRepository.findByUserName(username).isPresent()){
+        if (userRepository.findByUserName(userName).isPresent()){
             throw new UserAlreadyExistsException("That username is already associated with a user.");
         }
         if (userRepository.findByEmail(email).isPresent()){
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
 
         String encodedPassword = encoder.encode(password);
         
-        User user = new User(company, username, encodedPassword, email);
+        User user = new User(company, userName, encodedPassword, email);
 
         return userRepository.save(user);
     }

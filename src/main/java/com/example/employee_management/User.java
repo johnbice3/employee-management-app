@@ -2,6 +2,8 @@ package com.example.employee_management;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +34,8 @@ public class User {
     @Column(unique = true)
     private String email;
     private boolean enabled;
+    @Enumerated(EnumType.STRING) 
+    private CompanyRole companyRole = CompanyRole.BASIC;
 
     public User(Company employer, String userName, String password, String email){
         this.employer = employer;
@@ -40,8 +44,15 @@ public class User {
         this.email = email;
         this.enabled = true;
     }
+    public User(Company employer, String userName, String password, String email, CompanyRole companyRole){
+        this(employer, userName, password, email);
+        this.companyRole = companyRole;
+    }
     protected User(){
 
+    }
+    public Long getId(){
+        return this.id;
     }
     public String getUserName(){
         return this.userName;
@@ -54,5 +65,8 @@ public class User {
     }
     public String getPassword(){
         return this.password;
+    }
+    public CompanyRole getCompanyRole(){
+        return this.companyRole;
     }
 }

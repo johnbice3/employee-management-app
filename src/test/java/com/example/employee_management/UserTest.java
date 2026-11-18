@@ -15,11 +15,10 @@ public class UserTest {
     }
 
     @Test
-    void shouldCreateAnHrUser(){
+    void shouldCreateUserWithSpecifiedRole(){
         Company testCompany = new Company("Test Company");
         User hrUser = new User(testCompany, "hrTestUser", "rawPassword", "hrTestUser@test.com", CompanyRole.HR);
 
         assertEquals(CompanyRole.HR, hrUser.getCompanyRole());
     }
-    
 }

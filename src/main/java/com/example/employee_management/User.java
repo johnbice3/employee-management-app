@@ -69,4 +69,13 @@ public class User {
     public CompanyRole getCompanyRole(){
         return this.companyRole;
     }
+    public boolean isEnabled(){
+        return this.enabled;
+    }
+    public void setDisabled(){
+        this.enabled = false;
+    }
+    public void setEnabled(){
+        this.enabled = true;
+    }
 }

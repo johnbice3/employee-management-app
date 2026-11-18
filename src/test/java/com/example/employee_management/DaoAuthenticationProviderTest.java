@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,25 @@ public class DaoAuthenticationProviderTest {
 
         assertThrows(
             BadCredentialsException.class,
+            () -> daoAuthenticationProvider.authenticate(authToken)
+        );
+    }
+    @Test
+    void shouldRejectDisabledUser(){
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+            .withUsername("testUser")
+            .password(passwordEncoder.encode("myPassword123"))
+            .authorities("ROLE_HR")
+            .disabled(true)
+            .build();
+
+        when (userDetailsService.loadUserByUsername("testUser"))
+            .thenReturn(userDetails);
+
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), "myPassword123");
+
+        assertThrows(
+            DisabledException.class,
             () -> daoAuthenticationProvider.authenticate(authToken)
         );
     }
